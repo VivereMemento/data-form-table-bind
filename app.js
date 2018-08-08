@@ -80,26 +80,28 @@ class App {
     // debugger;
   }
 
-    _handleSubmitClick(event) {
+  _handleSubmit() {
 
-      const form = this._getForm()[0];
-      const fields = form.getElementsByTagName('input');
+    const form = this._getForm()[0];
+    const fields = form.getElementsByTagName('input');
+    const clearInputs = () => [...fields].forEach(input => input.value = '');
 
-      const data = [...fields].reduce((obj, input) => {
-          obj[input.id] = input.value;
-          return obj;
-      },{});
+    const data = [...fields].reduce((obj, input) => {
+        obj[input.id] = input.value;
+        return obj;
+    },{});
 
-      for (let key in this._store._state) {
-        if (key === data.__innerID) {
-            this._store._state[key] = {...data, id: data.__innerID.match(/[0-9]/g)};
-            this._handleChangeData();
-            return;
-        }
+    for (let key in this._store._state) {
+      if (key === data.__innerID) {
+          this._store._state[key] = {...data, id: data.__innerID.match(/[0-9]/g)};
+          this._handleChangeData();
+          clearInputs();
+          return;
       }
-      this._store.addRecord(data);
-
     }
+    this._store.addRecord(data);
+    clearInputs();
+  }
 
   _populateToForm(rowData) {
     const form = document.forms[this._formName];
@@ -121,7 +123,7 @@ class App {
 
     parentTable.addEventListener('dblclick', this._handleDbClick.bind(this));
     parentTable.addEventListener('click', this._handleClick.bind(this));
-    submitBtn.addEventListener('click', this._handleSubmitClick.bind(this));
+    submitBtn.addEventListener('click', this._handleSubmit.bind(this));
   }
 
 }
