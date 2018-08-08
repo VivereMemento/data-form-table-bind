@@ -96,7 +96,6 @@ class App {
       
       if (key === data.__innerID) {
           this._store._state[key] = {...data, id};
-          console.log(this._store._state[key]);
           this._handleChangeData();
           clearInputs();
           return;
