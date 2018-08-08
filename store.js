@@ -15,6 +15,7 @@ class Store {
   _addInnerRecord(data) {
     data.id = this._id;
     this._state[this._generateId()] = data;
+    // debugger;
   }
 
   addRecord(data) {

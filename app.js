@@ -18,12 +18,15 @@ class App {
       first: 'test',
       last: 'test',
       handle: 'test',
-    })
-    // console.log();
+    });
   }
 
   _getTable() {
     return document.getElementById(this._dataTableId);
+  }
+
+  _getForm() {
+    return document.getElementsByName(this._formName);
   }
 
   _handleChangeData() {
@@ -77,6 +80,27 @@ class App {
     // debugger;
   }
 
+    _handleSubmitClick(event) {
+
+      const form = this._getForm()[0];
+      const fields = form.getElementsByTagName('input');
+
+      const data = [...fields].reduce((obj, input) => {
+          obj[input.id] = input.value;
+          return obj;
+      },{});
+
+      for (let key in this._store._state) {
+        if (key === data.__innerID) {
+            this._store._state[key] = {...data, id: data.__innerID.match(/[0-9]/g)};
+            this._handleChangeData();
+            return;
+        }
+      }
+      this._store.addRecord(data);
+
+    }
+
   _populateToForm(rowData) {
     const form = document.forms[this._formName];
     const fields = Object.keys(rowData);
@@ -92,8 +116,12 @@ class App {
 
   _bindEventListeners() {
     const parentTable = this._getTable();
+    const form = this._getForm()[0];
+    const submitBtn = form.querySelector('button');
+
     parentTable.addEventListener('dblclick', this._handleDbClick.bind(this));
     parentTable.addEventListener('click', this._handleClick.bind(this));
+    submitBtn.addEventListener('click', this._handleSubmitClick.bind(this));
   }
 
 }
