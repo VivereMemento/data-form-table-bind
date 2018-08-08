@@ -92,8 +92,11 @@ class App {
     },{});
 
     for (let key in this._store._state) {
+      const id = parseFloat(data.__innerID.match(/[0-9]/g)[0]);
+      
       if (key === data.__innerID) {
-          this._store._state[key] = {...data, id: data.__innerID.match(/[0-9]/g)};
+          this._store._state[key] = {...data, id};
+          console.log(this._store._state[key]);
           this._handleChangeData();
           clearInputs();
           return;
